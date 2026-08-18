@@ -7,6 +7,7 @@ export const apiConfig = registerAs(CONFIG_API_TOKEN, () => {
     const env = ApiEnvSchema.parse(process.env);
 
     return {
+        port: env.API_PORT,
         database: {
             host: env.DB_HOST,
             port: env.DB_PORT,
