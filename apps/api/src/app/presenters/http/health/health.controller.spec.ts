@@ -4,7 +4,7 @@ import { TerminusModule } from '@nestjs/terminus';
 import request from 'supertest';
 
 import { CheckDatabaseHealthUseCase } from '../../../application/use-cases/system/health-check/check-database-health/check-database-health.use-case';
-import { DatabaseHealthIndicator } from './database-health.indicator';
+import { DatabaseHealthIndicator } from './indicators/database-health.indicator';
 import { HealthController } from './health.controller';
 
 describe('HealthController', () => {
