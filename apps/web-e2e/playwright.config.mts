@@ -1,12 +1,8 @@
-import { resolve } from 'node:path';
 import { defineConfig, devices } from '@playwright/test';
-import { loadEnv } from 'vite';
 
-const workspaceRoot = resolve(import.meta.dirname, '../..');
-const mode = process.env.NODE_ENV ?? 'development';
-const env = loadEnv(mode, workspaceRoot, '');
-const webPort = Number(process.env.WEB_PORT ?? env.WEB_PORT ?? 4200);
-const webUrl = `http://localhost:${webPort}`;
+import { loadPlaywrightRuntimeConfig } from './playwright-runtime-config.mts';
+
+const { webPort, webUrl } = loadPlaywrightRuntimeConfig();
 
 export default defineConfig({
     testDir: './src',
