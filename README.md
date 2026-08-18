@@ -112,7 +112,7 @@ CI also performs startup smoke checks for both API and Web after the build/E2E s
 
 ## Environment and database
 
-The committed `.env.example` defines the local defaults:
+The committed `.env.example` defines the local database defaults:
 
 ```dotenv
 DB_HOST=localhost
@@ -120,11 +120,9 @@ DB_PORT=5432
 DB_USERNAME=postgres
 DB_PASSWORD=postgres
 DB_NAME=application_template
-API_PORT=3000
-WEB_PORT=4200
 ```
 
-Copy it to `.env` for local development and change values when your environment requires it. Do not commit credentials or secrets.
+Copy it to `.env` for local development and change values when your environment requires it. Application development servers use the documented default ports (`3000` for API and `4200` for Web); those ports are configured by their respective application tooling rather than by `.env.example`. Do not commit credentials or secrets.
 
 PostgreSQL is provided by `docker-compose.yaml` using PostgreSQL 17 and a persistent named volume. The container has a `pg_isready` health check.
 
