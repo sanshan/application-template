@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { Injectable } from '@nestjs/common';
 
-import { DatabaseHealthProbe } from '../../../../../domain/database-health-probe';
+import { DatabaseHealthProbe } from '../../../../../domain/system/health-check/database-health-probe';
 import { DatabaseHealthCheckPort } from '../../../../ports/database-health-check.port';
 
 @Injectable()
