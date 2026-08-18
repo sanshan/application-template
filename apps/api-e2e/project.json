@@ -10,7 +10,7 @@
       "continuous": true,
       "executor": "nx:run-commands",
       "options": {
-        "command": "pnpm nx run @application-template/api:migration:run && pnpm nx run @application-template/api:build && node apps/api/dist/main.js"
+        "command": "pnpm nx run @application-template/api:migration:run && pnpm nx run @application-template/api:build && exec node apps/api/dist/main.js"
       }
     },
     "e2e": {
