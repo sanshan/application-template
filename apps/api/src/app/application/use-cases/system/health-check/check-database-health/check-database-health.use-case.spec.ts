@@ -1,4 +1,4 @@
-import type { DatabaseHealthProbe } from '../../../../../domain/database-health-probe';
+import type { DatabaseHealthProbe } from '../../../../../domain/system/health-check/database-health-probe';
 import type { DatabaseHealthCheckPort } from '../../../../ports/database-health-check.port';
 import { CheckDatabaseHealthUseCase } from './check-database-health.use-case';
 
