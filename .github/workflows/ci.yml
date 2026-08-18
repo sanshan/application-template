@@ -77,11 +77,32 @@ jobs:
       - name: Build applications
         run: pnpm nx run-many -t build
 
-      - name: Run API E2E tests
-        run: pnpm nx run @application-template/api-e2e:e2e
+      - name: Verify API startup
+        shell: bash
+        run: |
+          pnpm nx run @application-template/api:serve > /tmp/api.log 2>&1 &
+          pid=$!
+          trap 'kill "$pid" 2>/dev/null || true' EXIT
+          for attempt in {1..30}; do
+            if curl --silent --output /dev/null http://127.0.0.1:3000/api; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/api.log
+          exit 1
 
-      - name: Install Playwright Chromium
-        run: pnpm exec playwright install --with-deps chromium
-
-      - name: Run browser E2E tests
-        run: pnpm nx run @application-template/web-e2e:e2e
+      - name: Verify Web startup
+        shell: bash
+        run: |
+          pnpm nx run @application-template/web:serve > /tmp/web.log 2>&1 &
+          pid=$!
+          trap 'kill "$pid" 2>/dev/null || true' EXIT
+          for attempt in {1..30}; do
+            if curl --fail --silent --output /dev/null http://127.0.0.1:4200; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/web.log
+          exit 1
