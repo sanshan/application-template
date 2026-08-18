@@ -77,6 +77,15 @@ jobs:
       - name: Build applications
         run: pnpm nx run-many -t build
 
+      - name: Run API E2E
+        run: pnpm nx run @application-template/api-e2e:e2e
+
+      - name: Install Playwright Chromium
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Run Web E2E
+        run: pnpm nx run @application-template/web-e2e:e2e
+
       - name: Verify API startup
         shell: bash
         run: |
