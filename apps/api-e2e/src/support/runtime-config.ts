@@ -1,23 +1,16 @@
-const DEFAULT_API_PORT = 3000;
-const DEFAULT_HOST = 'localhost';
+import { z } from 'zod';
 
-function parsePort(value: string | undefined): number {
-    const port = Number(value ?? DEFAULT_API_PORT);
-
-    if (!Number.isInteger(port) || port < 1 || port > 65535) {
-        throw new Error('API_PORT must be an integer between 1 and 65535');
-    }
-
-    return port;
-}
+const ApiE2eRuntimeEnvSchema = z.object({
+    HOST: z.string().min(1).default('localhost'),
+    API_PORT: z.coerce.number().int().min(1).max(65535).default(3000),
+});
 
 export function getApiE2eRuntimeConfig() {
-    const host = process.env.HOST ?? DEFAULT_HOST;
-    const port = parsePort(process.env.API_PORT);
+    const env = ApiE2eRuntimeEnvSchema.parse(process.env);
 
     return {
-        host,
-        port,
-        baseUrl: `http://${host}:${port}`,
+        host: env.HOST,
+        port: env.API_PORT,
+        baseUrl: `http://${env.HOST}:${env.API_PORT}`,
     };
 }
