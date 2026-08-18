@@ -1,8 +1,12 @@
 import { Module } from '@nestjs/common';
 import type { ConfigType } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+
+import { DatabaseHealthCheckPort } from '../../../application/ports/database-health-check.port';
 import { ApiConfigModule } from '../../config/api-config.module';
 import { apiConfig } from '../../config/api.config';
+import { DatabaseHealthProbeEntity } from './entities/database-health-probe.entity';
+import { TypeOrmDatabaseHealthCheckRepository } from './repositories/typeorm-database-health-check.repository';
 
 @Module({
     imports: [
@@ -25,7 +29,14 @@ import { apiConfig } from '../../config/api.config';
                 };
             },
         }),
+        TypeOrmModule.forFeature([DatabaseHealthProbeEntity]),
     ],
-    exports: [TypeOrmModule],
+    providers: [
+        {
+            provide: DatabaseHealthCheckPort,
+            useClass: TypeOrmDatabaseHealthCheckRepository,
+        },
+    ],
+    exports: [TypeOrmModule, DatabaseHealthCheckPort],
 })
 export class ApiTypeormModule {}
