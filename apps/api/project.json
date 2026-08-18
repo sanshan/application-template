@@ -21,7 +21,12 @@
       "options": {"buildTarget": "@application-template/api:build"},
       "configurations": {
         "development": {"buildTarget": "@application-template/api:build"},
-        "production": {"buildTarget": "@application-template/api:build"}
+        "production": {"buildTarget": "@application-template/api:build"},
+        "e2e": {
+          "buildTarget": "@application-template/api:build",
+          "watch": false,
+          "inspect": false
+        }
       }
     },
     "test": {"options": {"passWithNoTests": true}},
