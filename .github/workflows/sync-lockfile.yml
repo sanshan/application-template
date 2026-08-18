@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - task/zod-lockfile-sync
+  pull_request:
+    branches:
+      - task/final-verification
 
 permissions:
   contents: write
@@ -12,7 +15,7 @@ jobs:
   sync:
     runs-on: ubuntu-24.04
     steps:
-      - name: Checkout repository
+      - name: Checkout generator branch
         uses: actions/checkout@v6
         with:
           ref: task/zod-lockfile-sync
