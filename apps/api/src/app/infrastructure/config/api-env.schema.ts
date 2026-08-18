@@ -6,4 +6,5 @@ export const ApiEnvSchema = z.object({
     DB_USERNAME: z.string(),
     DB_PASSWORD: z.string(),
     DB_NAME: z.string(),
+    API_PORT: z.coerce.number().int().min(1).max(65535).default(3000),
 });
