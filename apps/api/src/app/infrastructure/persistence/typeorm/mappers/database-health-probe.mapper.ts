@@ -1,4 +1,4 @@
-import { DatabaseHealthProbe } from '../../../../domain/database-health-probe';
+import { DatabaseHealthProbe } from '../../../../domain/system/health-check/database-health-probe';
 import type { DatabaseHealthProbeEntity } from '../entities/database-health-probe.entity';
 
 export class DatabaseHealthProbeMapper {
