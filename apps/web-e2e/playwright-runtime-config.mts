@@ -1,27 +1,21 @@
 import { resolve } from 'node:path';
 import { loadEnv } from 'vite';
+import { z } from 'zod';
 
-const DEFAULT_WEB_PORT = 4200;
 const VITE_MODE = 'development';
-
-function parsePort(name: 'WEB_PORT', value: string | undefined, fallback: number): number {
-    const rawValue = value ?? String(fallback);
-    const port = Number(rawValue);
-
-    if (!Number.isInteger(port) || port < 1 || port > 65535) {
-        throw new Error(`${name} must be an integer between 1 and 65535`);
-    }
-
-    return port;
-}
+const PlaywrightRuntimeEnvSchema = z.object({
+    WEB_PORT: z.coerce.number().int().min(1).max(65535).default(4200),
+});
 
 export function loadPlaywrightRuntimeConfig() {
     const workspaceRoot = resolve(import.meta.dirname, '../..');
     const env = loadEnv(VITE_MODE, workspaceRoot, '');
-    const webPort = parsePort('WEB_PORT', process.env.WEB_PORT ?? env.WEB_PORT, DEFAULT_WEB_PORT);
+    const runtimeEnv = PlaywrightRuntimeEnvSchema.parse({
+        WEB_PORT: process.env.WEB_PORT ?? env.WEB_PORT,
+    });
 
     return {
-        webPort,
-        webUrl: `http://localhost:${webPort}`,
+        webPort: runtimeEnv.WEB_PORT,
+        webUrl: `http://localhost:${runtimeEnv.WEB_PORT}`,
     };
 }
