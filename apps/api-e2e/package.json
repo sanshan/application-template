@@ -1,0 +1,6 @@
+{
+  "name": "@application-template/api-e2e",
+  "version": "1.0.0",
+  "private": true,
+  "devDependencies": {"axios": "^1.19.0"}
+}
