@@ -1,4 +1,4 @@
-import type { DatabaseHealthProbe } from '../../domain/database-health-probe';
+import type { DatabaseHealthProbe } from '../../domain/system/health-check/database-health-probe';
 
 export abstract class DatabaseHealthCheckPort {
     abstract save(probe: DatabaseHealthProbe): Promise<void>;
