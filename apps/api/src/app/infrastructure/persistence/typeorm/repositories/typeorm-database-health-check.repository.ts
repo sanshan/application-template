@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 
 import type { DatabaseHealthCheckPort } from '../../../../application/ports/database-health-check.port';
-import type { DatabaseHealthProbe } from '../../../../domain/database-health-probe';
+import type { DatabaseHealthProbe } from '../../../../domain/system/health-check/database-health-probe';
 import { DatabaseHealthProbeEntity } from '../entities/database-health-probe.entity';
 import { DatabaseHealthProbeMapper } from '../mappers/database-health-probe.mapper';
 
