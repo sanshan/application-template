@@ -2,7 +2,7 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
-import { loadWebRuntimeConfig } from './vite-runtime-config';
+import { loadWebRuntimeConfig } from './vite-runtime-config.mts';
 
 export default defineConfig(({ mode }) => {
     const { apiPort, webPort } = loadWebRuntimeConfig(mode);
