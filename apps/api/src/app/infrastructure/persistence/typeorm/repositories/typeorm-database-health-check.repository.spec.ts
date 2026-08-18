@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import type { QueryRunner, Repository } from 'typeorm';
 
-import { DatabaseHealthProbe } from '../../../../domain/database-health-probe';
+import { DatabaseHealthProbe } from '../../../../domain/system/health-check/database-health-probe';
 import { AppDataSource } from '../data-source';
 import { DatabaseHealthProbeEntity } from '../entities/database-health-probe.entity';
 import { TypeOrmDatabaseHealthCheckRepository } from './typeorm-database-health-check.repository';
