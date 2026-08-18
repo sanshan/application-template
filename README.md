@@ -38,7 +38,7 @@ pnpm nx run @application-template/api:serve
 pnpm nx run @application-template/web:serve
 ```
 
-The default environment exposes the API on port `3000` and the Web application on port `4200`.
+The default environment exposes the API on port `3000` and the Web application on port `4200`. Override them with `API_PORT` and `WEB_PORT` in the root `.env` when needed.
 
 Stop PostgreSQL with:
 
@@ -68,7 +68,7 @@ Ensure PostgreSQL is available, then run:
 pnpm nx run @application-template/api-e2e:e2e
 ```
 
-The E2E target runs migrations, starts the real Nest application using the non-watch `serve:e2e` configuration, and executes HTTP tests against it. The current health specification verifies both `/api/health/live` and `/api/health/ready`, making it a production-useful smoke test for application startup, routing, dependency wiring, and database readiness.
+The E2E target runs migrations, starts the real Nest application using the non-watch `serve:e2e` configuration, and executes HTTP tests against it. The current health specification verifies both `/api/health/live` and `/api/health/ready`, making it a production-useful smoke test for application startup, routing, dependency wiring, database readiness, and the configured `API_PORT`.
 
 ### Web tests
 
@@ -92,7 +92,7 @@ Then run:
 pnpm nx run @application-template/web-e2e:e2e
 ```
 
-The Playwright harness currently permits zero product test cases. This is intentional at template stage: the E2E infrastructure is ready without committing the template to a fictional user flow. Real browser tests should be added with real product behavior.
+The Playwright harness currently permits zero product test cases. This is intentional at template stage: the E2E infrastructure is ready without committing the template to a fictional user flow. The harness and its managed Web server use the configured `WEB_PORT`. Real browser tests should be added with real product behavior.
 
 ### Repository checks
 
@@ -108,11 +108,11 @@ pnpm nx run @application-template/api-e2e:e2e
 pnpm nx run @application-template/web-e2e:e2e
 ```
 
-CI also performs startup smoke checks for both API and Web after the build/E2E stages.
+CI also performs startup smoke checks for both API and Web after the build/E2E stages. CI intentionally uses non-default `API_PORT` and `WEB_PORT` values so the pipeline verifies that port configuration is propagated end to end rather than passing only because of hardcoded defaults.
 
 ## Environment and database
 
-The committed `.env.example` defines the local database defaults:
+The committed `.env.example` defines the local defaults:
 
 ```dotenv
 DB_HOST=localhost
@@ -120,9 +120,11 @@ DB_PORT=5432
 DB_USERNAME=postgres
 DB_PASSWORD=postgres
 DB_NAME=application_template
+API_PORT=3000
+WEB_PORT=4200
 ```
 
-Copy it to `.env` for local development and change values when your environment requires it. Application development servers use the documented default ports (`3000` for API and `4200` for Web); those ports are configured by their respective application tooling rather than by `.env.example`. Do not commit credentials or secrets.
+Copy it to `.env` for local development and change values when your environment requires it. `API_PORT` controls the Nest HTTP server and API E2E target. `WEB_PORT` controls the Vite development/preview server and Playwright Web E2E harness. The Vite `/api` development proxy derives its target port from `API_PORT`, so changing the API port does not require a separate proxy edit. Do not commit credentials or secrets.
 
 PostgreSQL is provided by `docker-compose.yaml` using PostgreSQL 17 and a persistent named volume. The container has a `pg_isready` health check.
 
