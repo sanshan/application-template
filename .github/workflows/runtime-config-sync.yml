@@ -28,7 +28,7 @@ jobs:
           node-version: 24
 
       - name: Install dependencies and update lockfile
-        run: pnpm install --lockfile-only
+        run: pnpm install --no-frozen-lockfile
 
       - name: Synchronize Nx TypeScript references
         run: pnpm nx sync
