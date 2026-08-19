@@ -1,0 +1,32 @@
+name: Diagnose runtime config workspace package
+
+on:
+  pull_request:
+    branches:
+      - task/final-verification
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: task/runtime-config-diagnose
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 10
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Import runtime-config from Web
+        working-directory: apps/web
+        run: >-
+          node --input-type=module -e
+          "import('@application-template/runtime-config').then((m) => console.log(m.PortsEnvSchema.parse({}))).catch((error) => { console.error(error); process.exit(1); })"
+      - name: Load Vite config directly
+        working-directory: apps/web
+        run: >-
+          node --input-type=module -e
+          "import('vite').then(({ loadConfigFromFile }) => loadConfigFromFile({ command: 'serve', mode: 'development' }, './vite.config.mts')).then((result) => console.log(result?.config)).catch((error) => { console.error(error); process.exit(1); })"
