@@ -30,6 +30,11 @@
         }
       }
     },
+    "start": {
+      "continuous": true,
+      "executor": "nx:run-commands",
+      "options": {"command": "node apps/api/dist/main.js"}
+    },
     "test": {"options": {"passWithNoTests": true}},
     "migration:generate": {"executor":"nx:run-commands","options":{"command":"pnpm -w --filter @application-template/api run migration:generate"}},
     "migration:run": {"executor":"nx:run-commands","options":{"command":"pnpm -w --filter @application-template/api run migration:run"}},
