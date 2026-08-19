@@ -87,9 +87,15 @@ jobs:
         run: |
           pnpm nx run @application-template/api:serve > /tmp/api.log 2>&1 &
           pid=$!
-          trap 'kill "$pid" 2>/dev/null || true' EXIT
+          cleanup() {
+            kill "$pid" 2>/dev/null || true
+            wait "$pid" 2>/dev/null || true
+          }
+          trap cleanup EXIT
           for attempt in {1..30}; do
             if curl --silent --output /dev/null "http://127.0.0.1:${API_PORT}/api"; then
+              cleanup
+              trap - EXIT
               exit 0
             fi
             sleep 1
@@ -102,9 +108,15 @@ jobs:
         run: |
           pnpm nx run @application-template/web:serve > /tmp/web.log 2>&1 &
           pid=$!
-          trap 'kill "$pid" 2>/dev/null || true' EXIT
+          cleanup() {
+            kill "$pid" 2>/dev/null || true
+            wait "$pid" 2>/dev/null || true
+          }
+          trap cleanup EXIT
           for attempt in {1..30}; do
             if curl --fail --silent --output /dev/null "http://localhost:${WEB_PORT}"; then
+              cleanup
+              trap - EXIT
               exit 0
             fi
             sleep 1
