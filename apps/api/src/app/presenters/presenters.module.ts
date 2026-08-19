@@ -6,7 +6,12 @@ import { DatabaseHealthIndicator } from './http/health/indicators/database-healt
 import { HealthController } from './http/health/health.controller';
 
 @Module({
-    imports: [ApplicationModule, TerminusModule],
+    imports: [
+        ApplicationModule,
+        TerminusModule.forRoot({
+            gracefulShutdownTimeoutMs: 1_000,
+        }),
+    ],
     controllers: [HealthController],
     providers: [DatabaseHealthIndicator],
 })

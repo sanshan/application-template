@@ -1,4 +1,5 @@
-import type { INestApplication } from '@nestjs/common';
+import { ShutdownSignal, type INestApplication } from '@nestjs/common';
+import type { NestApplicationContext } from '@nestjs/core';
 import { Test, type TestingModule } from '@nestjs/testing';
 import { TerminusModule } from '@nestjs/terminus';
 import request from 'supertest';
@@ -9,15 +10,21 @@ import { HealthController } from './health.controller';
 
 describe('HealthController', () => {
     let app: INestApplication;
+    let appClosed: boolean;
     let checkDatabaseHealthUseCase: { execute: jest.Mock<Promise<void>, []> };
 
     beforeEach(async () => {
+        appClosed = false;
         checkDatabaseHealthUseCase = {
             execute: jest.fn(),
         };
 
         const module: TestingModule = await Test.createTestingModule({
-            imports: [TerminusModule],
+            imports: [
+                TerminusModule.forRoot({
+                    gracefulShutdownTimeoutMs: 64,
+                }),
+            ],
             controllers: [HealthController],
             providers: [
                 DatabaseHealthIndicator,
@@ -34,7 +41,9 @@ describe('HealthController', () => {
     });
 
     afterEach(async () => {
-        await app.close();
+        if (!appClosed) {
+            await app.close();
+        }
     });
 
     it('returns a healthy liveness response without invoking database health', async () => {
@@ -69,5 +78,20 @@ describe('HealthController', () => {
         expect(response.body.error.database).toEqual({ status: 'down' });
         expect(response.body.details.database).toEqual({ status: 'down' });
         expect(JSON.stringify(response.body)).not.toContain('sensitive database failure');
+    });
+
+    it('reports readiness as shutting down while the graceful shutdown delay is active', async () => {
+        checkDatabaseHealthUseCase.execute.mockResolvedValue();
+
+        const closePromise = (app.close as NestApplicationContext['close'])(ShutdownSignal.SIGTERM);
+
+        await new Promise((resolve) => setTimeout(resolve, 16));
+
+        const response = await request(app.getHttpServer()).get('/api/health/ready').expect(503);
+
+        expect(response.body.status).toBe('shutting_down');
+
+        await closePromise;
+        appClosed = true;
     });
 });
