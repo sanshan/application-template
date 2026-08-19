@@ -1,3 +1,5 @@
+import { describe, expect, it } from 'vitest';
+
 import * as runtimeConfigPackage from '../src/index';
 
 describe('runtime-config public API', () => {
