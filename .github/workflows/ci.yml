@@ -82,10 +82,10 @@ jobs:
       - name: Run API E2E
         run: pnpm nx run @application-template/api-e2e:e2e
 
-      - name: Verify API startup
+      - name: Verify API artifact startup
         shell: bash
         run: |
-          pnpm nx run @application-template/api:serve > /tmp/api.log 2>&1 &
+          pnpm nx run @application-template/api:start > /tmp/api.log 2>&1 &
           pid=$!
           cleanup() {
             kill "$pid" 2>/dev/null || true
@@ -93,7 +93,7 @@ jobs:
           }
           trap cleanup EXIT
           for attempt in {1..30}; do
-            if curl --silent --output /dev/null "http://127.0.0.1:${API_PORT}/api"; then
+            if curl --fail --silent --output /dev/null "http://127.0.0.1:${API_PORT}/api/health/live"; then
               cleanup
               trap - EXIT
               exit 0
@@ -103,10 +103,10 @@ jobs:
           cat /tmp/api.log
           exit 1
 
-      - name: Verify Web startup
+      - name: Verify Web artifact startup
         shell: bash
         run: |
-          pnpm nx run @application-template/web:serve > /tmp/web.log 2>&1 &
+          pnpm nx run @application-template/web:serve-static --port="${WEB_PORT}" --watch=false > /tmp/web.log 2>&1 &
           pid=$!
           cleanup() {
             kill "$pid" 2>/dev/null || true
