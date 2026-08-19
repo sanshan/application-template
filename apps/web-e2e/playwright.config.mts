@@ -1,8 +1,8 @@
+import { runtimeConfig } from '@application-template/runtime-config';
 import { defineConfig, devices } from '@playwright/test';
 
-import { loadPlaywrightRuntimeConfig } from './playwright-runtime-config.mts';
-
-const { webPort, webUrl } = loadPlaywrightRuntimeConfig();
+const { port: webPort } = runtimeConfig.web;
+const webUrl = `http://localhost:${webPort}`;
 
 export default defineConfig({
     testDir: './src',
