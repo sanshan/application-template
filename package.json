@@ -21,7 +21,6 @@
     "@nx/vitest": "23.0.2",
     "@nx/web": "23.0.2",
     "@nx/webpack": "23.0.2",
-    "@playwright/test": "^1.37.0",
     "@swc/cli": "~0.8.0",
     "@swc/core": "~1.15.5",
     "@swc/helpers": "~0.5.18",

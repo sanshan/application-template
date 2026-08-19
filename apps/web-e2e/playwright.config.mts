@@ -1,15 +1,19 @@
 import { defineConfig, devices } from '@playwright/test';
 
+import { loadPlaywrightRuntimeConfig } from './playwright-runtime-config.mts';
+
+const { webPort, webUrl } = loadPlaywrightRuntimeConfig();
+
 export default defineConfig({
     testDir: './src',
     use: {
-        baseURL: 'http://localhost:4200',
+        baseURL: webUrl,
         trace: 'on-first-retry',
     },
     webServer: {
-        command: 'pnpm exec vite --host localhost --port 4200',
+        command: `pnpm exec vite --host localhost --port ${webPort}`,
         cwd: '../web',
-        url: 'http://localhost:4200',
+        url: webUrl,
         reuseExistingServer: true,
     },
     projects: [

@@ -10,6 +10,7 @@
     "tslib": "catalog:"
   },
   "devDependencies": {
+    "@application-template/runtime-config": "workspace:*",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/user-event": "^14.6.4"
   }
