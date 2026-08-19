@@ -1,3 +1,4 @@
+import { runtimeConfig } from '@application-template/runtime-config';
 import { registerAs } from '@nestjs/config';
 import { ApiEnvSchema } from './api-env.schema';
 
@@ -7,7 +8,7 @@ export const apiConfig = registerAs(CONFIG_API_TOKEN, () => {
     const env = ApiEnvSchema.parse(process.env);
 
     return {
-        port: env.API_PORT,
+        port: runtimeConfig.api.port,
         database: {
             host: env.DB_HOST,
             port: env.DB_PORT,
