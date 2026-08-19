@@ -4,6 +4,7 @@
   "private": true,
   "nx": {"implicitDependencies": ["@application-template/web"]},
   "devDependencies": {
-    "@application-template/runtime-config": "workspace:*"
+    "@application-template/runtime-config": "workspace:*",
+    "@playwright/test": "catalog:"
   }
 }
