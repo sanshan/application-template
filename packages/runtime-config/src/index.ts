@@ -1,1 +1,1 @@
-export * from './lib/ports-env.schema.js';
+export * from './lib/ports-env.schema.ts';
