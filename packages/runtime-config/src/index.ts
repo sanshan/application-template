@@ -9,11 +9,11 @@ const RuntimeEnvSchema = z.object({
 
 const runtimeEnv = RuntimeEnvSchema.parse(process.env);
 
-export const runtimeConfig = {
-    api: {
+export const runtimeConfig = Object.freeze({
+    api: Object.freeze({
         port: runtimeEnv.API_PORT,
-    },
-    web: {
+    }),
+    web: Object.freeze({
         port: runtimeEnv.WEB_PORT,
-    },
-};
+    }),
+});
