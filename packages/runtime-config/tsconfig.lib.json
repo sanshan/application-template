@@ -5,7 +5,6 @@
         "outDir": "dist",
         "tsBuildInfoFile": "dist/tsconfig.lib.tsbuildinfo",
         "emitDeclarationOnly": true,
-        "allowImportingTsExtensions": true,
         "importHelpers": true,
         "noImplicitReturns": true,
         "types": ["node"]
