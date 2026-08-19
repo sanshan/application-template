@@ -1,10 +1,10 @@
+import { PortsEnvSchema } from '@application-template/runtime-config';
 import { resolve } from 'node:path';
 import { loadEnv } from 'vite';
-import { z } from 'zod';
 
 const VITE_MODE = 'development';
-const PlaywrightRuntimeEnvSchema = z.object({
-    WEB_PORT: z.coerce.number().int().min(1).max(65535).default(4200),
+const PlaywrightRuntimeEnvSchema = PortsEnvSchema.pick({
+    WEB_PORT: true,
 });
 
 export function loadPlaywrightRuntimeConfig() {
