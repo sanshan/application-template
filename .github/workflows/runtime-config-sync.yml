@@ -1,0 +1,47 @@
+name: Sync runtime config workspace links
+
+on:
+  pull_request:
+    branches:
+      - task/final-verification
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout sync branch
+        uses: actions/checkout@v6
+        with:
+          ref: task/runtime-config-sync
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          version: 10
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - name: Install dependencies and update lockfile
+        run: pnpm install --lockfile-only
+
+      - name: Synchronize Nx TypeScript references
+        run: pnpm nx sync
+
+      - name: Commit generated workspace metadata
+        shell: bash
+        run: |
+          git add -A
+          git reset .github/workflows/runtime-config-sync.yml
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: sync runtime config workspace links"
+          git push origin HEAD:task/runtime-config-sync
