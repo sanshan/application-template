@@ -1,8 +1,10 @@
+import { PortsEnvSchema } from '@application-template/runtime-config';
 import { z } from 'zod';
 
-const ApiE2eRuntimeEnvSchema = z.object({
+const ApiE2eRuntimeEnvSchema = PortsEnvSchema.pick({
+    API_PORT: true,
+}).extend({
     HOST: z.string().min(1).default('localhost'),
-    API_PORT: z.coerce.number().int().min(1).max(65535).default(3000),
 });
 
 export function getApiE2eRuntimeConfig() {
