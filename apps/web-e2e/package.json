@@ -4,6 +4,6 @@
   "private": true,
   "nx": {"implicitDependencies": ["@application-template/web"]},
   "devDependencies": {
-    "zod": "catalog:"
+    "@application-template/runtime-config": "workspace:*"
   }
 }
