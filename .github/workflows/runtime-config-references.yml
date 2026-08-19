@@ -1,0 +1,39 @@
+name: Sync runtime config TypeScript references
+
+on:
+  pull_request:
+    branches:
+      - task/final-verification
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: task/runtime-config-references
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 10
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Synchronize Nx TypeScript references
+        run: pnpm nx sync
+      - name: Commit synchronized references
+        shell: bash
+        run: |
+          git add -A
+          git reset .github/workflows/runtime-config-references.yml
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: sync runtime config TypeScript references"
+          git push origin HEAD:task/runtime-config-references
