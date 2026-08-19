@@ -1,21 +1,20 @@
 /// <reference types='vitest' />
-import { defineConfig } from 'vite';
+import { runtimeConfig } from '@application-template/runtime-config';
 import react from '@vitejs/plugin-react';
+import { defineConfig } from 'vite';
 
-import { loadWebRuntimeConfig } from './vite-runtime-config.mts';
-
-export default defineConfig(({ mode }) => {
-    const { apiPort, webPort } = loadWebRuntimeConfig(mode);
+export default defineConfig(() => {
+    const { api, web } = runtimeConfig;
 
     return {
         root: import.meta.dirname,
         cacheDir: '../../node_modules/.vite/apps/web',
         server: {
-            port: webPort,
+            port: web.port,
             host: 'localhost',
-            proxy: {'/api': {target: `http://localhost:${apiPort}`, changeOrigin: true}},
+            proxy: {'/api': {target: `http://localhost:${api.port}`, changeOrigin: true}},
         },
-        preview: {port: webPort, host: 'localhost'},
+        preview: {port: web.port, host: 'localhost'},
         plugins: [react()],
         build: {
             outDir: './dist',

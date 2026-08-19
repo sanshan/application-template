@@ -1,9 +1,7 @@
-import { PortSchema, PortsEnvSchema } from '@application-template/runtime-config';
+import { PortSchema } from '@application-template/runtime-config';
 import { z } from 'zod';
 
-export const ApiEnvSchema = PortsEnvSchema.pick({
-    API_PORT: true,
-}).extend({
+export const ApiEnvSchema = z.object({
     DB_HOST: z.string(),
     DB_PORT: PortSchema,
     DB_USERNAME: z.string(),
