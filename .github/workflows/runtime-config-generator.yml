@@ -1,15 +1,12 @@
-name: Generate runtime config package
+name: Inspect runtime config package
 
 on:
   pull_request:
     branches:
       - task/final-verification
 
-permissions:
-  contents: write
-
 jobs:
-  generate:
+  inspect:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout generator branch
@@ -30,38 +27,5 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Inspect generator options
-        run: pnpm nx g @nx/js:lib --help
-
-      - name: Dry-run generator
-        run: >-
-          pnpm nx g @nx/js:lib packages/runtime-config
-          --bundler=none
-          --unitTestRunner=none
-          --linter=eslint
-          --importPath=@application-template/runtime-config
-          --dry-run
-
-      - name: Generate package
-        run: >-
-          pnpm nx g @nx/js:lib packages/runtime-config
-          --bundler=none
-          --unitTestRunner=none
-          --linter=eslint
-          --importPath=@application-template/runtime-config
-
-      - name: Show generated diff
-        run: git diff -- . ':!.github/workflows/runtime-config-generator.yml'
-
-      - name: Commit generated files
-        shell: bash
-        run: |
-          git add -A
-          git reset .github/workflows/runtime-config-generator.yml
-          if git diff --cached --quiet; then
-            exit 0
-          fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "chore: generate runtime config package"
-          git push origin HEAD:task/runtime-config-generator
+      - name: Show generated Nx project
+        run: pnpm nx show project @application-template/runtime-config --json
